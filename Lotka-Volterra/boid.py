@@ -3,7 +3,7 @@ import ray
 from utils import norm
 
 class Boid():
-    def __init__(self, x, y, width, height,sex):
+    def __init__(self, x, y, width, height):
 
         self.max_force_esc = 9
         self.max_force_bor = 4

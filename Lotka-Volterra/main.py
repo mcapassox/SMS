@@ -2,7 +2,6 @@ import numpy as np
 from prey import Prey
 from predators import Predator
 from scipy import spatial
-import time
 from celluloid import Camera
 from matplotlib import pyplot as plt
 from utils import *
@@ -44,8 +43,8 @@ def single_sim(value):
 
     elapsed = 0
 
-    flock = [Prey(*np.random.rand(2)*1000, width, height, np.mod(_,2)) for _ in range(n_flock)]
-    predators = [Predator(*np.random.rand(2)*1000, width, height,np.mod(_,2)) for _ in range(n_pred)]
+    flock = [Prey(*np.random.rand(2)*1000, width, height) for _ in range(n_flock)]
+    predators = [Predator(*np.random.rand(2)*1000, width, height) for _ in range(n_pred)]
 
     _thread.start_new_thread(input_thread, (a_list,))
 
@@ -58,7 +57,7 @@ def single_sim(value):
         all = flock + predators
 
         for boid in all:
-            boid.apply_behaviour(flock, tree, locations, pointmap, predators, elapsed)
+            boid.apply_behaviour(flock, tree, locations, pointmap, predators)
 
         for boid in all:
             boid.update()
@@ -88,6 +87,7 @@ total_prey = np.zeros((len_sim,2))
 total_pred = np.zeros((len_sim,2))
 time_vec = np.linspace(0,len_sim,len_sim)
 time_vec = time_vec.reshape((len_sim))
+
 n_sim = 20
 
 for value in range(n_sim):
@@ -118,6 +118,5 @@ for i in range(n_sim):
 total_prey_mean = np.mean(total_prey, axis = 0)
 total_pred_mean = np.mean(total_pred, axis = 0)
 print("\n")
-
 
 plotty(time_vec, total_prey_mean, total_pred_mean, total_prey, total_pred)

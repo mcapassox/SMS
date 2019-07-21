@@ -6,18 +6,18 @@ from utils import *
 
 class Predator(Boid):
 
-    def __init__(self, x, y, width, height,sex):
-        Boid.__init__(self,x,y,width, height, sex)
+    def __init__(self, x, y, width, height):
+        Boid.__init__(self, x, y, width, height)
 
         self.max_force_coe = 3
         self.max_speed = 15
+
+        self.velocity = (np.random.rand(2) - 0.5)*self.max_speed
 
         self.perception = 30
         self.radius = 5
         self.color = 'r'
         self.eat_counter = 0
-
-        self.velocity = (np.random.rand(2) - 0.5)*self.max_speed
 
 
 
@@ -27,10 +27,11 @@ class Predator(Boid):
 
 
 
-    def apply_behaviour(self, boids, tree, locations, pointmap, predators, time):
+    def apply_behaviour(self, boids, tree, locations, pointmap, predators):
 
         #indices = getNearestPoint_Radius(tree, [self.position[0], self.position[1]], self.perception)
         indices = getNearestPoint(tree, [self.position[0], self.position[1]], locations)
+
         range = [point for near_loc in locations[indices]
                        for point in pointmap[tuple(near_loc)]]
 
@@ -63,6 +64,5 @@ class Predator(Boid):
         x = np.random.randint(0, self.perception/2) - self.perception + self.position[0]
         y = np.random.randint(0, self.perception/2) - self.perception + self.position[1]
 
-
-        newborn = Predator(x,y, self.width, self.height, np.random.randint(0,10)%2)
+        newborn = Predator(x,y, self.width, self.height)
         boids.append(newborn)

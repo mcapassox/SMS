@@ -6,13 +6,13 @@ from utils import *
 
 class Prey(Boid):
 
-    def __init__(self, x, y, width, height, sex):
-        Boid.__init__(self, x, y, width, height, sex)
+    def __init__(self, x, y, width, height):
+        Boid.__init__(self, x, y, width, height)
 
         self.max_force_coe = 0.7
         self.max_force_sep = 1
         self.max_force_esc = 15
-        
+
         self.max_speed = 5
         self.perception = 50
 
@@ -28,6 +28,7 @@ class Prey(Boid):
 
         indices = getNearestPoint(tree, [self.position[0], self.position[1]], locations)
         indices = np.delete(indices,0)
+
         if indices.size - 1 :
             range = [point for near_loc in locations[indices]
                        for point in pointmap[tuple(near_loc)]]
@@ -42,20 +43,11 @@ class Prey(Boid):
             self.acceleration += (alignment)
             self.acceleration += (separation)
 
-            #if time - self.birthdate > 20 :
-            #self.reproduce(boids, range, time)
-
-
         borders = self.borders()
         pred = self.run_away(predators)
 
         self.acceleration += borders
         self.acceleration += pred
-
-        #self.starve(time, boids)
-        #self.resources_contention(boids)
-        #self.old_age(boids, time)
-        #self.die(boids)
 
     def align(self, boids):
         steering = np.zeros(2)
@@ -97,17 +89,3 @@ class Prey(Boid):
                 if mag != 0:
                     steering += (distance/mag) * self.max_force_esc
         return steering
-
-    def reproduce(self, boids, range, time):
-        for boid in boids:
-            if norm(self.position - boid.position,2) < self.perception/2  and self.sex == 1 and boid.sex == 0 :
-                    if np.random.randint(0,400) < 1:
-                        x = np.random.randint(0, self.perception/2) - self.perception + self.position[0]
-                        y = np.random.randint(0, self.perception/2) - self.perception + self.position[1]
-
-                        newborn = Prey(x,y, self.width, self.height, np.random.randint(0,10)%2)
-                        newborn.birthdate = time
-                        boids.append(newborn)
-                        boid.lastproc = time
-                        self.lastproc = time
-                        break

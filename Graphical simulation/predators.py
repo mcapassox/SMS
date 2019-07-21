@@ -6,8 +6,8 @@ from utils import *
 
 class Predator(Boid):
 
-    def __init__(self, x, y, width, height, sex):
-        Boid.__init__(self, x,y,width, height, sex)
+    def __init__(self, x, y, width, height):
+        Boid.__init__(self, x,y,width, height)
 
         self.max_force_coe = 2
         self.max_speed = 13
@@ -16,7 +16,6 @@ class Predator(Boid):
         self.lastate = 0
         self.radius = 5
         self.color = 'r'
-        self.sex = sex
 
         self.eat_counter = 0
         self.velocity = (np.random.rand(2) - 0.5)*10

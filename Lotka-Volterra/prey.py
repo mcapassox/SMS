@@ -6,21 +6,23 @@ from utils import *
 
 class Prey(Boid):
 
-    def __init__(self, x, y, width, height, sex):
-        Boid.__init__(self, x, y, width, height, sex)
+    def __init__(self, x, y, width, height):
+        Boid.__init__(self, x, y, width, height)
 
         self.max_force_coe = 0.7
         self.max_force_sep = 1
         self.max_force_esc = 10
+
         self.max_speed = 7
         self.perception = 50
 
+        self.velocity = (np.random.rand(2) - 0.5)*self.max_speed
+        
         self.radius = 2
         self.color = 'b'
 
-        self.velocity = (np.random.rand(2) - 0.5)*self.max_speed
 
-    def apply_behaviour(self, boids, tree, locations, pointmap, predators, time):
+    def apply_behaviour(self, boids, tree, locations, pointmap, predators):
 
         indices = getNearestPoint(tree, [self.position[0], self.position[1]], locations)
         indices = np.delete(indices,0)
@@ -39,7 +41,7 @@ class Prey(Boid):
             self.acceleration += (alignment)
             self.acceleration += (separation)
 
-            self.reproduce(boids, range, time)
+            self.reproduce(boids, range)
 
 
         borders = self.borders()
@@ -89,10 +91,10 @@ class Prey(Boid):
                     steering += (distance/mag) * self.max_force_esc
         return steering
 
-    def reproduce(self, boids, range, time):
+    def reproduce(self, boids, range):
         if np.random.randint(0,52) < 1:
             x = np.random.randint(0, self.perception/2) - self.perception + self.position[0]
             y = np.random.randint(0, self.perception/2) - self.perception + self.position[1]
 
-            newborn = Prey(x,y, self.width, self.height, np.random.randint(0,10)%2)
+            newborn = Prey(x,y, self.width, self.height)
             boids.append(newborn)

@@ -9,7 +9,8 @@ from utils import *
 
 def photoshoot():
 
-    for value in range(1):
+    n_sim = 1
+    for value in range(n_sim):
 
         width = 1000
         height = 1000
@@ -18,8 +19,8 @@ def photoshoot():
         n_pred = 5
         elapsed = 0
 
-        flock = [Prey(*np.random.rand(2)*1000, width, height, np.mod(_,2)) for _ in range(n_flock)]
-        predators = [Predator(*np.random.rand(2)*1000, width, height, np.mod(_,2)) for _ in range(n_pred)]
+        flock = [Prey(*np.random.rand(2)*1000, width, height) for _ in range(n_flock)]
+        predators = [Predator(*np.random.rand(2)*1000, width, height) for _ in range(n_pred)]
 
         fig = plt.figure()
         camera = Camera(fig)
@@ -65,7 +66,7 @@ def photoshoot():
             elapsed += 1
 
         anim = camera.animate()
-        anim.save("{}_300_5pred.mp4".format(value), writer = 'imagemagick')
+        anim.save("simulation_{}.mp4".format(value), writer = 'imagemagick')
 
 def single_sim():
 
@@ -98,6 +99,5 @@ def single_sim():
         elapsed += 1
 
 
-#collect_data()
 photoshoot()
 #single_sim()
